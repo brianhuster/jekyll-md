@@ -64,7 +64,7 @@ function headerPreview(markdownText) {
                 <time class="dt-published">
                     ${formattedDate}
                 </time>
-        `+ (data.author && formattedDate) ? ` • ` : `` +`
+        `+ ((data.author && formattedDate) ? ` • ` : ``) +`
                 <span itemprop="author">
                     <span class="p-author h-card">${data.author}</span>
                 </span>
