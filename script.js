@@ -54,7 +54,7 @@ function headerPreview(markdownText) {
         }
         // Format the date
         var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-        var formattedDate = dateObject ? monthNames[dateObject.getMonth()] + ' ' + dateObject.getDate() + ', ' + dateObject.getFullYear() + ' • ' : '';
+        var formattedDate = dateObject ? monthNames[dateObject.getMonth()] + ' ' + dateObject.getDate() + ', ' + dateObject.getFullYear() : '';
                 
         // Create the header HTML
         var headerHtml = `
@@ -63,7 +63,8 @@ function headerPreview(markdownText) {
             <p class="post-meta">
                 <time class="dt-published">
                     ${formattedDate}
-                </time> 
+                </time>
+        `+ (data.author && formattedDate) ? ` • ` : `` +`
                 <span itemprop="author">
                     <span class="p-author h-card">${data.author}</span>
                 </span>
