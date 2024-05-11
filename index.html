@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Jekyll markdown editor</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js" integrity="sha512-xeUh+KxNyTufZOje++oQHstlMQ8/rpyzPuM+gjMFYK3z5ILJGE7l2NvYL+XfliKURMpBIKKp1XoPN/qswlSMFA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="script.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Jekyll markdown preview</h1>
+    </header>
+    <input type="file" id="file-input" onchange="openFile(event)" style="display: none;">
+    <button id="open-btn" onclick="document.getElementById('file-input').click()">Open</button>
+    <button id="edit-btn" onclick="showEditor()">Edit</button>
+    <button id="preview-btn" onclick="showPreview()">Preview</button>
+    <button id="save-btn" onclick="saveFile()">Save</button>
+    <button id="clear-btn" onclick="localStorage.clear()" title="Local storage is a web storage that allows web to store and access data right in the browser with no expiration time. It has only 5MB of memory. Clicking this button will clear all data stored in local storage.">Clear local storage</button>
+
+    <div id="input">
+        <textarea id="markdown" oninput="updatePreview()">
+---
+layout: post
+title:  "Your title"
+date:   YYYY-MM-DD HH:MM:SS +0700
+author: "Author Name"
+---
+
+# Section/Tiêu đề
+Content goes here
+## Subsection/Tiêu đề con
+More content goes here
+### Subsubsection/Tiêu đề con con
+Even more content goes here
+
+*Italic*, **bold** and ***italic bold*** text
+
+Link: [Link text](https://brianhuster.github.io)
+
+Image: ![Alt text](https://d1hjkbq40fs2x4.cloudfront.net/2017-08-21/files/landscape-photography_1645.jpg)
+        </textarea>
+    </div>
+    <div id="preview"></div>
+</body>
+</html>
+
+Code block: 
+
+```
+print("Hello, world!")
+```
