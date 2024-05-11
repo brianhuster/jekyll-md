@@ -49,20 +49,21 @@ function headerPreview(markdownText) {
         var dateTimeParts = data.date.split(' ');
         var dateParts = dateTimeParts[0].split('-');
         var dateObject = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
-
+        if (isNaN(dateObject.getTime())) {
+            dateObject = undefined;
+        }
         // Format the date
         var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-        var formattedDate = dateObject? monthNames[dateObject.getMonth()] + ' ' + dateObject.getDate() + ', ' + dateObject.getFullYear() : '';
+        var formattedDate = dateObject ? monthNames[dateObject.getMonth()] + ' ' + dateObject.getDate() + ', ' + dateObject.getFullYear() + ' • ' : '';
                 
         // Create the header HTML
         var headerHtml = `
         <header class="post-header">
             <h1 class="post-title p-name">${data.title}</h1>
             <p class="post-meta">
-                <time class="dt-published" datetime="${data.date}">
+                <time class="dt-published">
                     ${formattedDate}
-                </time>
-                • 
+                </time> 
                 <span itemprop="author">
                     <span class="p-author h-card">${data.author}</span>
                 </span>
