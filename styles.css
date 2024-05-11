@@ -16,11 +16,14 @@
     width: 100%;
     float: none;
   }
+  #preview {
+    display: none;
+  }
   #edit-btn, #preview-btn {
     display: inline-block;
   }
   button {
-    padding: 10px;
+    padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
   }
