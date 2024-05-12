@@ -4,7 +4,8 @@
     <title>Jekyll markdown editor</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js" integrity="sha512-xeUh+KxNyTufZOje++oQHstlMQ8/rpyzPuM+gjMFYK3z5ILJGE7l2NvYL+XfliKURMpBIKKp1XoPN/qswlSMFA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <header>
@@ -14,7 +15,8 @@
     <button id="open-btn" onclick="document.getElementById('file-input').click()">Open</button>
     <button id="edit-btn" onclick="showEditor()">Edit</button>
     <button id="preview-btn" onclick="showPreview()">Preview</button>
-    <button id="save-btn" onclick="saveFile()">Save</button>
+    <button id="save-btn" onclick="saveFile()">Save markdown file</button>
+    <!-- <button id="pdf-btn" onclick="downloadPDF()">Save PDF</button> -->
     <button id="clear-btn" onclick="localStorage.clear()" title="Local storage is a web storage that allows web to store and access data right in the browser with no expiration time. It has only 5MB of memory. Clicking this button will clear all data stored in local storage.">Clear local storage</button>
 
     <div id="input">
@@ -47,5 +49,6 @@ print("Hello, world!")
         </textarea>
     </div>
     <div id="preview"></div>
+    <script src="script.js"></script>
 </body>
 </html>

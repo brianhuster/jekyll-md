@@ -13,8 +13,6 @@ window.onload = function() {
     }
 };
 
-window.onload
-
 function updatePreview() {
     var markdownText = document.getElementById('markdown').value;
     document.getElementById('preview').innerHTML = "<article>"+headerPreview(markdownText) + contentPreview(markdownText)+"</article>";
@@ -102,6 +100,7 @@ function openFile(event) {
     };
     reader.readAsText(event.target.files[0]);
 }
+
 function saveFile(){
     var markdownText = document.getElementById('markdown').value;
     var dateMatch = markdownText.match(/date:\s*(\d{4}-\d{2}-\d{2})/);
@@ -118,6 +117,46 @@ function saveFile(){
     link.download = filename;
     link.click();
 }
+
+// function downloadPDF() {
+//     var markdownText = document.getElementById('markdown').value;
+//     var dateMatch = markdownText.match(/date:\s*(\d{4}-\d{2}-\d{2})/);
+//     var date = dateMatch ? dateMatch[1] + '-' : "";
+//     var title = markdownText.match(/title:\s*"([^"]*)"/)[1];
+//     title = title.replace(/\s+/g, '-');
+//     title = title.replace(/[\\/:*?"<>|]/g, '');
+//     var filename = date + title + '.pdf';
+
+//     var pdf = new jsPDF();
+//     var preview = document.getElementById('preview');
+
+//     // Convert all images to screenshots
+//     var images = preview.getElementsByTagName('img');
+//     var promises = Array.from(images).map(function(img) {
+//         return new Promise(function(resolve, reject) {
+//             var image = new Image();
+//             image.onload = function() {
+//                 if (image) {
+//                     html2canvas(image).then(function(canvas) {
+//                         img.src = canvas.toDataURL('image/png');
+//                         resolve();
+//                     });
+//                 };
+//             }
+//             image.onerror = reject;
+//             image.src = img.src;
+//         });
+//     });
+
+//     // Once all images have been converted to screenshots, convert the HTML to a PDF
+//     Promise.all(promises).then(function() {
+//         pdf.html(preview.innerHTML, {
+//             callback: function (pdf) {
+//                 pdf.save(filename);
+//             }
+//         });
+//     });
+// }
 
 document.addEventListener('keydown', function(event) {
     if (event.ctrlKey) {
