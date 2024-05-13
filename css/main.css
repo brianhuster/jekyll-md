@@ -1,0 +1,57 @@
+#preview, #markdown {
+  width: 45%;
+  float: left;
+    height: 90vh;
+    padding: 2%;
+    box-sizing: border-box;
+    overflow-y: scroll;
+    font-size: 16px;
+}
+
+#edit-btn, #preview-btn {
+    display: none;
+}
+
+@media screen and (max-width: 1200px) {
+  #markdown, #preview {
+    width: 100%;
+    float: none;
+  }
+  #markdown {
+    font-size: 30px;
+  }
+  #preview {
+    display: none;
+    max-width: 800px;
+  }
+  #edit-btn, #preview-btn {
+    display: inline-block;
+  }
+  button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+}
+
+.dialog {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4);
+}
+
+.dialog-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+

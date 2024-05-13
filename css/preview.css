@@ -1,0 +1,101 @@
+article {
+    background-color:#fdfdfd;
+    margin: 0 auto;
+    max-width: 800px;
+    padding: 20px;
+    box-sizing: border-box;
+    font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Segoe UI Emoji", "Segoe UI Symbol", "Apple Color Emoji", Roboto, Helvetica, Arial, sans-serif;
+}
+img {
+    max-width: 100%;
+    height: auto;
+    vertical-align: middle;
+}
+.post-header {
+    margin-bottom: 30px;
+  }
+  .post-title {
+    font-size: 42px;
+    letter-spacing: -1px;
+    line-height: 1;
+    font-weight: normal;
+  }
+  .post-meta {
+    font-size: 14px;
+    color: #828282;
+  }
+  .post-content {
+    margin-bottom: 30px;
+  }
+  .post-content h1 {
+    font-size: 32px;
+    font-weight: normal;
+  }
+  .post-content h2 {
+    font-size: 26px;
+    font-weight: normal;
+  }
+  .post-content h3 {
+    font-size: 20px;
+    font-weight: normal;
+  }
+  @media screen and (max-width: 1200px) {
+    .post-title {
+      font-size: 36px;
+    }
+    article {
+      max-width: 90%;
+    }
+    .post-content h1 {
+      font-size: 28px;
+    }
+    .post-content h2 {
+      font-size: 22px;
+    }
+    .post-content h3 {
+      font-size: 18px;
+    }
+  }
+
+  blockquote {
+
+    border-left: 4px solid;
+    font-style: italic;
+  
+    > :last-child {
+      margin-bottom: 0;
+    }
+  
+    i, em {
+      font-style: normal;
+    }
+  }
+  
+  
+  
+  /**
+   * Code formatting
+   */
+  pre,
+  code {
+    font-size: 15px;
+    background-color: #eef;
+  }
+  
+  code {
+    padding: 1px 5px;
+  }
+  
+  pre {
+    padding: 8px 12px;
+    overflow-x: auto;
+  
+    > code {
+      border: 0;
+      padding-right: 0;
+      padding-left: 0;
+    }
+  }
+  
+  
+  

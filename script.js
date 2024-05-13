@@ -1,7 +1,8 @@
-
+const mdEditor= document.getElementById('markdown');
+const preview= document.getElementById('preview');
 window.onload = function() {
     if (localStorage.getItem('jekyll_md')) {
-        document.getElementById('markdown').value = localStorage.getItem('jekyll_md');
+        mdEditor.value = localStorage.getItem('jekyll_md');
     }
     updatePreview();
     try {
@@ -14,8 +15,8 @@ window.onload = function() {
 };
 
 function updatePreview() {
-    var markdownText = document.getElementById('markdown').value;
-    document.getElementById('preview').innerHTML = "<article>"+headerPreview(markdownText) + contentPreview(markdownText)+"</article>";
+    var markdownText = mdEditor.value;
+    preview.innerHTML = "<article>"+headerPreview(markdownText) + contentPreview(markdownText)+"</article>";
     //lưu text vào local storage
     localStorage.setItem('jekyll_md', markdownText);
     try {
@@ -82,34 +83,50 @@ function contentPreview(markdownText) {
     return contentHtml;
 }
 
+async function readFile(filePath){
+    try {
+        const response = await fetch(filePath);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const text = await response.text();
+        return text;
+    } catch (error) {
+        console.log('There was a problem with the fetch operation: ' + error.message);
+    }
+}
 
 function showEditor() {
     document.getElementById('input').style.display = 'block';
-    document.getElementById('preview').style.display = 'none';
+    preview.style.display = 'none';
 }
 function showPreview() {
     document.getElementById('input').style.display = 'none';
-    document.getElementById('preview').style.display = 'block';
+    preview.style.display = 'block';
 }
 function openFile(event) {
     var reader = new FileReader();
     reader.onload = function() {
         var text = reader.result;
-        document.getElementById('markdown').value = text;
+        mdEditor.value = text;
         updatePreview();
     };
     reader.readAsText(event.target.files[0]);
 }
 
-function saveFile(){
-    var markdownText = document.getElementById('markdown').value;
+function fileName() {
+    var markdownText = mdEditor.value;
     var dateMatch = markdownText.match(/date:\s*(\d{4}-\d{2}-\d{2})/);
     var date = dateMatch ? dateMatch[1] + '-' : "";
     var title = markdownText.match(/title:\s*"([^"]*)"/)[1];
     title = title.replace(/\s+/g, '-');
     title = title.replace(/[\\/:*?"<>|]/g, '');
-    var filename = date + title + '.md';
+    var filename = date + title;
+    return filename;
+}
 
+function saveMd(filename){
+    var markdownText = mdEditor.value;
     var blob = new Blob([markdownText], {type: "text/plain;charset=utf-8"});
     var url = URL.createObjectURL(blob);
     var link = document.createElement('a');
@@ -118,59 +135,78 @@ function saveFile(){
     link.click();
 }
 
-// function downloadPDF() {
-//     var markdownText = document.getElementById('markdown').value;
-//     var dateMatch = markdownText.match(/date:\s*(\d{4}-\d{2}-\d{2})/);
-//     var date = dateMatch ? dateMatch[1] + '-' : "";
-//     var title = markdownText.match(/title:\s*"([^"]*)"/)[1];
-//     title = title.replace(/\s+/g, '-');
-//     title = title.replace(/[\\/:*?"<>|]/g, '');
-//     var filename = date + title + '.pdf';
+async function saveDoc(filename) {
+    var preHtml = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Export HTML To Doc</title>";
+    var postHtml = "</body></html>";
+    var css=await readFile("css/preview.css");
+    css = css.replace(/article/g, 'body');
+    css='<style> '+css+' </style></head><body>';
+    var html = preview.innerHTML;
+    html = await replaceImgWithBase64(html);
+    html += postHtml;
+    var html = preHtml + css + html;
+    var blob = new Blob(['\ufeff', html], {
+        type: 'application/msword'
+    });
 
-//     var pdf = new jsPDF();
-//     var preview = document.getElementById('preview');
+    var url = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(html);
 
-//     // Convert all images to screenshots
-//     var images = preview.getElementsByTagName('img');
-//     var promises = Array.from(images).map(function(img) {
-//         return new Promise(function(resolve, reject) {
-//             var image = new Image();
-//             image.onload = function() {
-//                 if (image) {
-//                     html2canvas(image).then(function(canvas) {
-//                         img.src = canvas.toDataURL('image/png');
-//                         resolve();
-//                     });
-//                 };
-//             }
-//             image.onerror = reject;
-//             image.src = img.src;
-//         });
-//     });
 
-//     // Once all images have been converted to screenshots, convert the HTML to a PDF
-//     Promise.all(promises).then(function() {
-//         pdf.html(preview.innerHTML, {
-//             callback: function (pdf) {
-//                 pdf.save(filename);
-//             }
-//         });
-//     });
-// }
+    var downloadLink = document.createElement("a");
 
-document.addEventListener('keydown', function(event) {
-    if (event.ctrlKey) {
-        switch (event.key) {
-            case 'o':
-            case 'O':
-                event.preventDefault();
-                document.getElementById('file-input').click();
-                break;
-            case 's':
-            case 'S':
-                event.preventDefault();
-                saveFile();
-                break;
-        }
+    document.body.appendChild(downloadLink);
+
+    if (navigator.msSaveOrOpenBlob) {
+        navigator.msSaveOrOpenBlob(blob, filename);
+    } else {
+
+        downloadLink.href = url;
+        downloadLink.download = filename;
+        downloadLink.click();
     }
-});
+
+    document.body.removeChild(downloadLink);
+}
+
+async function saveDocx(filename) {
+    var css= await readFile("css/preview.css");
+    css = css.replace(/article/g, 'body');
+    var html = preview.innerHTML;
+    html =  "<head><style> "+css+" </style></head><body> "+html+" </body>";
+    console.log(html);
+    var docx = htmlDocx.asBlob(html);
+
+    var link = document.createElement('a');
+    link.href = URL.createObjectURL(docx);
+    link.download = filename;
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+function showDialog() {
+    document.getElementById('dialog').style.display = 'block';
+    document.getElementById('filename').value = fileName();
+}
+
+function hideDialog() {
+    document.getElementById('dialog').style.display = 'none';
+}
+
+function saveFile() {
+    var filename = document.getElementById('filename').value;
+    var filetype = document.getElementById('filetype').value;
+    switch (filetype) {
+        case 'md':
+            saveMd(filename+'.md');
+            break;
+        case 'doc':
+            saveDoc(filename+'.doc');
+            break;
+        case 'docx':
+            saveDocx(filename+'.docx');
+            break;
+    }
+    hideDialog();
+}
