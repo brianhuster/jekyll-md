@@ -5,13 +5,16 @@ article {
     padding: 20px;
     box-sizing: border-box;
     font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Segoe UI Emoji", "Segoe UI Symbol", "Apple Color Emoji", Roboto, Helvetica, Arial, sans-serif;
-}
-img {
+
+    img {
     max-width: 100%;
     height: auto;
     vertical-align: middle;
 }
 .post-header {
+    padding: 0;
+    display: block;
+    box-shadow: none;
     margin-bottom: 30px;
   }
   .post-title {
@@ -99,3 +102,5 @@ img {
   
   
   
+
+}

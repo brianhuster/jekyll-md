@@ -2,8 +2,8 @@
 <html>
 <head>
     <title>Jekyll markdown editor</title>
-    <link rel="stylesheet" type="text/css" href="css/main.css">
     <link rel="stylesheet" type="text/css" href="css/preview.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js" integrity="sha512-xeUh+KxNyTufZOje++oQHstlMQ8/rpyzPuM+gjMFYK3z5ILJGE7l2NvYL+XfliKURMpBIKKp1XoPN/qswlSMFA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="html2docx.js"></script>
@@ -11,33 +11,39 @@
 <body>
     <header>
         <h1>Jekyll markdown editor</h1>
+        <div id="nav-bar">
+            <a href="#" onclick="loadPage('home')">Home</a>
+            <a href="#" onclick="loadPage('about')">About</a>
+        </div> 
     </header>
-    <input type="file" id="file-input" onchange="openFile(event)" style="display: none;">
-    <button id="open-btn" onclick="document.getElementById('file-input').click()">Open</button>
-    <button id="edit-btn" onclick="showEditor()">Edit</button>
-    <button id="preview-btn" onclick="showPreview()">Preview</button>
-    <button id="saveBtn" onclick="showDialog()">Save As</button>
-    <button id="clear-btn" onclick="localStorage.clear()" title="Local storage is a web storage that allows web to store and access data right in the browser with no expiration time. It has only 5MB of memory. Clicking this button will clear all data stored in local storage.">Clear local storage</button>
-    
-    <div id="dialog" class="dialog">
-        <div class="dialog-content">
-            <label for="filename">Filename (without extension)</label>
-            <input type="text" id="filename" name="filename">
-            <br>
-            <label for="filetype">File type</label>
-            <select id="filetype" name="filetype">
-                <option value="md">Markdown (.md)</option>
-                <option value="docx">Word Document (.docx)</option>
-                <option value="doc">Word Document (.doc)</option>
-            </select>
-            <br>
-            <button onclick="saveFile()">Save</button>
-            <button onclick="hideDialog()">Cancel</button>
+    <div id="content"></div>  
+    <template id="home">
+        <input type="file" id="file-input" onchange="openFile(event)" style="display: none;">
+        <button id="open-btn" onclick="document.getElementById('file-input').click()">Open</button>
+        <button id="edit-btn" onclick="showEditor()">Edit</button>
+        <button id="preview-btn" onclick="showPreview()">Preview</button>
+        <button id="saveBtn" onclick="showDialog()">Save As</button>
+        <button id="clear-btn" onclick="localStorage.clear()" title="Local storage is a web storage that allows web to store and access data right in the browser with no expiration time. It has only 5MB of memory. Clicking this button will clear all data stored in local storage.">Clear local storage</button>
+        
+        <div id="dialog" class="dialog">
+            <div class="dialog-content">
+                <label for="filename">Filename (without extension)</label>
+                <input type="text" id="filename" name="filename">
+                <br>
+                <label for="filetype">File type</label>
+                <select id="filetype" name="filetype">
+                    <option value="md">Markdown (.md)</option>
+                    <option value="docx">Word Document (.docx)</option>
+                    <option value="doc">Word Document (.doc)</option>
+                </select>
+                <br>
+                <button onclick="saveFile()">Save</button>
+                <button onclick="hideDialog()">Cancel</button>
+            </div>
         </div>
-    </div>
 
-    <div id="input">
-        <textarea id="markdown" oninput="updatePreview()">
+        <div id="input">
+            <textarea id="markdown" oninput="updatePreview()">
 ---
 layout: post
 title:  "Your title"
@@ -63,9 +69,94 @@ Code block:
 ```
 print("Hello, world!")
 ```
-        </textarea>
-    </div>
-    <div id="preview"></div>
+            </textarea>
+        </div>
+        <div id="preview"></div>
+    </template>
+
+    <template id="about">
+        <article>
+            <div class="post-content e-content">
+                <p>This is a simple web-based tool for editing previewing markdown content as it would appear in a Jekyll blog post.</p>
+                <h1>Features</h2>
+                <ul>
+                    <li>Live preview of Markdown content</li>
+                    <li>Ability to open markdown file or text file from your local memory</li>
+                    <li>Ability to save files as Markdown (.md), Word Document (.docx, .doc)</li>
+                    <li>Clear local storage option when it is full</li>
+                </ul>
+                <h1>How to write a Jekyll post with Jekyll markdown editor</h1>
+                <h2>Step 2: Add Front Matter</h2>
+    <p>At the top of your new post file, you'll need to add some YAML front matter. This is where you'll specify the post's metadata, such as the title, date, and any other variables you want to include. Here's an example:</p>
+    
+    <pre><code>---
+layout: post
+title: "My First Jekyll Post"
+date: 2024-05-14 09:00:00 -0500
+author: "Brian Huster"
+---</code></pre>
+    
+    <h2>Step 3: Write Your Post Content</h2>
+    <p>After the front matter, you can start writing your blog post's content using <a href="https://en.wikipedia.org/wiki/Markdown">markdown</a>. Here's an example:</p>
+    
+    <pre style="width: 45%; float: left; margin-right: 5%; @media screen and (max-width: 1200px) { width: 100%; float: none; }"><code>
+---
+layout: post
+title: "My First Jekyll Post"
+date: 2024-05-14 09:00:00 -0500
+author: "Brian Huster"
+---
+
+# Introduction
+
+This is the beginning of my awesome blog post!
+
+## Why Jekyll?
+
+Jekyll is a great choice for building blogs and static websites because:
+
+- It's simple and easy to use
+- It has a powerful templating system
+- It's highly customizable
+- It integrates well with version control systems like Git
+
+Stay tuned for more posts!
+</code></pre>
+
+<div id="result" style="width: 45%; float: left; @media screen and (max-width: 1200px) { width: 100%; float: none; }">
+    <article style="border: 1px solid rgba(0, 0, 0, 0.2);">
+        <header class="post-header">
+            <h1 class="post-title p-name">My First Jekyll Post</h1>
+            <p class="post-meta">
+                <time class="dt-published">
+                    May 14, 2024
+                </time>
+         • 
+                <span itemprop="author">
+                    <span class="p-author h-card">Brian Huster</span>
+                </span>
+            </p>
+        </header>
+        
+        <div class="post-content e-content">
+            <h1>Introduction</h1>
+            <p>This is the beginning of my awesome blog post!</p>
+            <h2>Why Jekyll?</h2>
+            <p>Jekyll is a great choice for building blogs and static websites because:</p>
+            <ul>
+                <li>It's simple and easy to use</li>
+                <li>It has a powerful templating system</li>
+                <li>It's highly customizable</li>
+                <li>It integrates well with version control systems like Git</li>
+            </ul>
+            <p>Stay tuned for more posts!</p>
+        </div>
+    </article>
+</div>
+
+            </div>
+        </article>
+    </template>
     <script src="script.js"></script>
 </body>
 </html>

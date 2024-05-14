@@ -1,8 +1,7 @@
-const mdEditor= document.getElementById('markdown');
-const preview= document.getElementById('preview');
 window.onload = function() {
+    loadPage('home');
     if (localStorage.getItem('jekyll_md')) {
-        mdEditor.value = localStorage.getItem('jekyll_md');
+        document.getElementById("markdown").value = localStorage.getItem('jekyll_md');
     }
     updatePreview();
     try {
@@ -14,9 +13,23 @@ window.onload = function() {
     }
 };
 
+function loadPage(pageId) {
+    var template = document.getElementById(pageId);
+    if (template) {
+        var content = document.getElementById('content');
+    
+        // Clear the current content
+        content.innerHTML = '';
+    
+        // Clone the template content and append it to the content container
+        content.appendChild(document.importNode(template.content, true));
+    }
+}
+
 function updatePreview() {
-    var markdownText = mdEditor.value;
-    preview.innerHTML = "<article>"+headerPreview(markdownText) + contentPreview(markdownText)+"</article>";
+    var markdownText = document.getElementById("markdown").value;
+    document.getElementById('preview').innerHTML = "<article>"+headerPreview(markdownText) + contentPreview(markdownText)+"</article>";
+    console.log(document.getElementById('preview').innerHTML);
     //lưu text vào local storage
     localStorage.setItem('jekyll_md', markdownText);
     try {
@@ -98,24 +111,28 @@ async function readFile(filePath){
 
 function showEditor() {
     document.getElementById('input').style.display = 'block';
-    preview.style.display = 'none';
+document.getElementById('preview').style.display = 'none';
+    document.getElementById('edit-btn').style.display = 'none';
+    document.getElementById('preview-btn').style.display = 'inline-block';
 }
 function showPreview() {
     document.getElementById('input').style.display = 'none';
-    preview.style.display = 'block';
+document.getElementById('preview').style.display = 'block';
+    document.getElementById('edit-btn').style.display = 'inline-block';
+    document.getElementById('preview-btn').style.display = 'none';
 }
 function openFile(event) {
     var reader = new FileReader();
     reader.onload = function() {
         var text = reader.result;
-        mdEditor.value = text;
+        document.getElementById("markdown").value = text;
         updatePreview();
     };
     reader.readAsText(event.target.files[0]);
 }
 
 function fileName() {
-    var markdownText = mdEditor.value;
+    var markdownText = document.getElementById("markdown").value;
     var dateMatch = markdownText.match(/date:\s*(\d{4}-\d{2}-\d{2})/);
     var date = dateMatch ? dateMatch[1] + '-' : "";
     var title = markdownText.match(/title:\s*"([^"]*)"/)[1];
@@ -126,7 +143,7 @@ function fileName() {
 }
 
 function saveMd(filename){
-    var markdownText = mdEditor.value;
+    var markdownText = document.getElementById("markdown").value;
     var blob = new Blob([markdownText], {type: "text/plain;charset=utf-8"});
     var url = URL.createObjectURL(blob);
     var link = document.createElement('a');
@@ -141,7 +158,7 @@ async function saveDoc(filename) {
     var css=await readFile("css/preview.css");
     css = css.replace(/article/g, 'body');
     css='<style> '+css+' </style></head><body>';
-    var html = preview.innerHTML;
+    var html = document.getElementById('preview').innerHTML;
     html = await replaceImgWithBase64(html);
     html += postHtml;
     var html = preHtml + css + html;
@@ -171,9 +188,8 @@ async function saveDoc(filename) {
 async function saveDocx(filename) {
     var css= await readFile("css/preview.css");
     css = css.replace(/article/g, 'body');
-    var html = preview.innerHTML;
+    var html = document.getElementById('preview').innerHTML;
     html =  "<head><style> "+css+" </style></head><body> "+html+" </body>";
-    console.log(html);
     var docx = htmlDocx.asBlob(html);
 
     var link = document.createElement('a');
