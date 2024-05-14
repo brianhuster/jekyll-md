@@ -24,6 +24,9 @@ function loadPage(pageId) {
         // Clone the template content and append it to the content container
         content.appendChild(document.importNode(template.content, true));
     }
+    if (pageId == 'home') {
+        updatePreview();
+    }
 }
 
 function updatePreview() {
