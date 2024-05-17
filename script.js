@@ -61,27 +61,30 @@ function headerPreview(markdownText) {
             data[key] = value;
             data[key] = value.replace(/^"|"$/g, '');
         }
-        var dateTimeParts = data.date.split(' ');
-        var dateParts = dateTimeParts[0].split('-');
-        var dateObject = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
-        if (isNaN(dateObject.getTime())) {
-            dateObject = undefined;
+        if (data.date) {
+            var dateTimeParts = data.date.split(' ');
+            var dateParts = dateTimeParts[0].split('-');
+            var dateObject = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+            if (isNaN(dateObject.getTime())) {
+                dateObject = undefined;
+            }
+            // Format the date
+            var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
         }
-        // Format the date
-        var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
         var formattedDate = dateObject ? monthNames[dateObject.getMonth()] + ' ' + dateObject.getDate() + ', ' + dateObject.getFullYear() : '';
-                
+        var title= data.title ? data.title : ''; 
+        var author= data.author ? data.author : '';       
         // Create the header HTML
         var headerHtml = `
         <header class="post-header">
-            <h1 class="post-title p-name">${data.title}</h1>
+            <h1 class="post-title p-name">${title}</h1>
             <p class="post-meta">
                 <time class="dt-published">
                     ${formattedDate}
                 </time>
         `+ ((data.author && formattedDate) ? ` • ` : ``) +`
                 <span itemprop="author">
-                    <span class="p-author h-card">${data.author}</span>
+                    <span class="p-author h-card">${author}</span>
                 </span>
             </p>
         </header>
