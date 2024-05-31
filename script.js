@@ -172,7 +172,6 @@ async function saveDoc(filename) {
 
     var url = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(html);
 
-
     var downloadLink = document.createElement("a");
 
     document.body.appendChild(downloadLink);
@@ -187,20 +186,6 @@ async function saveDoc(filename) {
     }
 
     document.body.removeChild(downloadLink);
-}
-
-async function saveDocx(filename) {
-    var css = await readFile("css/preview.css");
-    css = css.replace(/article/g, 'body');
-    var html = document.getElementById('preview').innerHTML;
-    var docx = htmlDocx.asBlob(html);
-    var url = URL.createObjectURL(docx);
-    var link = document.createElement('a');
-    link.href = url;
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
 }
 
 function showDialog() {
@@ -223,7 +208,7 @@ function saveFile() {
             saveDoc(filename+'.doc');
             break;
         case 'docx':
-            saveDocx(filename+'.docx');
+            saveDoc(filename+'.docx');
             break;
     }
     hideDialog();
