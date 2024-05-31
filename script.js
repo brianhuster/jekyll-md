@@ -165,7 +165,6 @@ async function saveDoc(filename) {
     css = css.replace(/article/g, 'body');
     css='<style> '+css+' </style></head><body>';
     var html = document.getElementById('preview').innerHTML;
-    html = await replaceImgWithBase64(html);
     html += postHtml;
     var html = preHtml + css + html;
     var blob = new Blob(['\ufeff', html], {
@@ -196,8 +195,8 @@ async function saveDocx(filename) {
     css = css.replace(/article/g, 'body');
     var html = document.getElementById('preview').innerHTML;
     html =  "<head><style> "+css+" </style></head><body> "+html+" </body>";
+    console.log(html);
     var docx = htmlDocx.asBlob(html);
-
     var link = document.createElement('a');
     link.href = URL.createObjectURL(docx);
     link.download = filename;
