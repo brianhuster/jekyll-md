@@ -32,7 +32,6 @@ function loadPage(pageId) {
 function updatePreview() {
     var markdownText = document.getElementById("markdown").value;
     document.getElementById('preview').innerHTML = "<article>"+headerPreview(markdownText) + contentPreview(markdownText)+"</article>";
-    console.log(document.getElementById('preview').innerHTML);
     //lưu text vào local storage
     localStorage.setItem('jekyll_md', markdownText);
     try {
@@ -191,16 +190,14 @@ async function saveDoc(filename) {
 }
 
 async function saveDocx(filename) {
-    var css= await readFile("css/preview.css");
+    var css = await readFile("css/preview.css");
     css = css.replace(/article/g, 'body');
     var html = document.getElementById('preview').innerHTML;
-    html =  "<head><style> "+css+" </style></head><body> "+html+" </body>";
-    console.log(html);
     var docx = htmlDocx.asBlob(html);
+    var url = URL.createObjectURL(docx);
     var link = document.createElement('a');
-    link.href = URL.createObjectURL(docx);
+    link.href = url;
     link.download = filename;
-
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
